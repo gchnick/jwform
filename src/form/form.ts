@@ -1,3 +1,4 @@
+import path from 'path';
 import { integrity } from "./integrity";
 import { Store } from "./store";
 
@@ -12,9 +13,10 @@ export abstract class Form {
         this.store = Store.getInstance();
         this.md5 = md5;
         this.isFlattened = isFlattened;
+        this.isIntegrity();
     }
 
-    isIntegrity(): void {
-        integrity(`${this.store.path}/${this.fileName}`, this.md5);
+    private isIntegrity(): void {
+        integrity(path.join(this.store.path, this.fileName), this.md5);
     }
 }
