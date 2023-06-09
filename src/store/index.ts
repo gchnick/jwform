@@ -1,4 +1,3 @@
-export * from './publisher';
-export * from './store';
-export * from './territory';
-
+export * from './publisher'
+export * from './store'
+export * from './territory'
