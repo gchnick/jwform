@@ -1,6 +1,6 @@
 import path from 'path';
+import { Store } from "../store/store";
 import { integrity } from "./integrity";
-import { Store } from "./store";
 
 export abstract class Form {
     private store: Store;

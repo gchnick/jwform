@@ -1,6 +1,5 @@
-import { Data } from "../form/data";
-import { Form } from "../form/form";
-import { Store } from "../form/store";
+import { Data, Form } from "../form";
+import { Store } from "../store";
 
 
 export class Pdfjw {
@@ -15,6 +14,5 @@ export class Pdfjw {
         // TODO: Implementar metodo
         return false;
     }
-
 
 }
