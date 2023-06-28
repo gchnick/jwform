@@ -1,9 +1,7 @@
-import { isPdftkAvaliability } from "./pdfjw/avaliability";
+import { isPdftkAvaliability } from './pdfjw/avaliability'
 
-function init(): void {
-    isPdftkAvaliability();
+function init (): void {
+    isPdftkAvaliability()
 }
 
-
-
-init();
+init()
