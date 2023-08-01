@@ -1,22 +1,31 @@
-export class Store {
-    private static instance: Store
-    private _path = ''
 
-    private constructor() { }
+export type Store = {path: string};
 
-    public static getInstance(): Store {
-        if (!Store.instance) {
-            Store.instance = new Store()
-        }
+/**
+ * The only instance of our Singleton
+ */
+let instance: ReturnType<typeof makeSingleton<Store>>;
 
-        return Store.instance
-    }
+const makeSingleton = <T>(initial?: T) => {
+  /** Closure of the singleton's value to keep it private */
+  let _value: T | undefined = initial;
+  /** Only the accessors are returned */
+  return {
+    getValue: (): T | undefined => _value,
+    setValue: (value: T) => _value = value,
+  };
+};
 
-    set path(path: string) {
-        this._path = path
-    }
+const getStore = (initial?: Store) => {
+  if (!instance) {
+    instance = makeSingleton<Store>(initial);
+    return instance;
+  }
+  if (initial) {
+    throw Error ("Store already initialised")
+  }
+  return instance;
+};
 
-    get path(): string {
-        return this._path
-    }
-}
+export default getStore;
+
