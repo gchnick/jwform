@@ -21,11 +21,11 @@ export class TransactionForm extends Form {
             ['pay',{x: 178, y: 43}],
             ['cashAvance',{x: 178, y: 56}],
             ['cashDeposit',{x: 362, y: 56}],
-            ['worldwideWorkDonations',{x: 95, y: 90}],
-            ['congregationExpenses',{x: 95, y: 104}],
+            ['worldwideWorkDonations',{x: 45, y: 90}],
+            ['congregationExpenses',{x: 45, y: 104}],
             ['otherTransactionsDescription',{x: 358, y: 119}],
-            ['otherTransactionsAmount',{x: 95, y: 119}],
-            ['total',{x: 95, y: 161}],
+            ['otherTransactionsAmount',{x: 45, y: 119}],
+            ['total',{x: 45, y: 161}],
         ])
     }
 
@@ -55,8 +55,12 @@ export class TransactionForm extends Form {
                             point && this.#drawSvgPathDone(point)
                         }
                         
-                        if(typeof value === 'string' && key !== 'type') {
+                        if(typeof value === 'string' && key === 'date') {
                             point && this.#drawText(value, point)
+                        }
+
+                        if(typeof value === 'string' && key !== 'type' && key !== 'date') {
+                            point && this.#drawAccountingNumber(value, point)
                         }
 
                         if(typeof value !== 'string' && typeof value !== 'undefined') {
@@ -67,14 +71,14 @@ export class TransactionForm extends Form {
                                 const amountText = another.amount
 
                                 descriptonPoint && this.#drawTextWithTopPadding(index, descriptonText, descriptonPoint)
-                                amountPoint && this.#drawTextWithTopPadding(index, amountText, amountPoint)
+                                amountPoint && this.#drawAccountingNumberWithTopPadding(index, amountText, amountPoint)
                             })
                         }
                     })
 
                     const point = this.mapper.get('total')
                     const total = formatted.total
-                    point && this.#drawText(total, point)
+                    point && this.#drawAccountingNumber(total, point)
 
                     resolve(await pdf.saveAsBase64())
                 }).catch(err => reject(err))
@@ -87,9 +91,13 @@ export class TransactionForm extends Form {
     }
 
     #drawTextWithTopPadding(index: number, text:string, point: Point) {
-        const TOP_PADDING = 14
-        const withPadding = {...point, y: point.y + TOP_PADDING * index }
+        const withPadding = this.#addTopPadding(index, point)
         this.#drawText(text, withPadding)
+    }
+
+    #drawAccountingNumberWithTopPadding(index: number, amount: string, point: Point) {
+        const withPadding = this.#addTopPadding(index, point)
+        this.#drawAccountingNumber(amount, withPadding)
     }
 
     #drawSvgPathDone(point: Point) {
@@ -98,11 +106,23 @@ export class TransactionForm extends Form {
             .drawSvgPath(SVG_PATH_DONE, { color: rgb(0,0,0), scale: 0.8})
     }
 
+    #drawAccountingNumber(amount: string, point: Point) {
+        const PIXEL_WITH_CHAR = 5
+        const margin = amount.length * PIXEL_WITH_CHAR
+        const accountingPoint = {...point, x: point.x + margin }
+        this.#drawText(amount, accountingPoint)
+    }
+
+    #addTopPadding(index: number, point: Point): Point {
+        const TOP_PADDING = 14
+        return {...point, y: point.y + TOP_PADDING * index }
+    }
+
     #getFirtPageAndMoveTo(point: Point): PDFPage {
         const firtPage = this.#document.getPage(0)
-        const widhth = firtPage.getWidth()
+        const width = firtPage.getWidth()
         const height = firtPage.getHeight()
-        firtPage.moveTo(widhth - point.x, height - point.y)
+        firtPage.moveTo(width - point.x, height - point.y)
         return firtPage
     }
 }

@@ -11,13 +11,13 @@ import getStore, { Store } from './store/store';
     const pdfJW = new PdfJW()
 
     const date = new Date()
-    const worldwideWorkDonations = 235.53
-    const congragationExpenses = 100
+    const worldwideWorkDonations = 0.53
+    const congragationExpenses = 10.12
     const form = new TransactionForm(store as Store)
     const otherTransactions: OtherTransactions = [
         { descripton: 'Gasto de mantenimiento', amount: 124 },
-        { descripton: 'Compra de alimentos', amount: 25 },
-        { descripton: 'Reparacion de techo', amount: 5235.12 },
+        { descripton: 'Compra de alimentos', amount: 2523 },
+        { descripton: 'Reparacion de techo', amount: 52235.12 },
     ]
     const data = new TransactionRecord(date,
         TransactionType.PAY,
