@@ -1,16 +1,9 @@
-import { Data, Form } from '../form'
-import { Store } from '../store'
+import { Data } from '../form/data'
+import { Form } from '../form/form'
 
-export class Pdfjw {
-    private readonly store: Store
+export class PdfJW {
 
-    constructor (storePath: string) {
-        this.store = Store.getInstance()
-        this.store.path = storePath
-    }
-
-    public generate (from: Form, data: Data, flatten: boolean): any {
-    // TODO: Implementar metodo
-        return false
+    generate (form: Form, data: Data): Promise<string> {
+        return form.generatePDF(data)
     }
 }

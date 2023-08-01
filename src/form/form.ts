@@ -1,22 +1,35 @@
-import path from 'path'
-import { Store } from '../store/store'
+import path from 'node:path'
+import { Store } from '../store'
+import { Data } from './data'
 import { integrity } from './integrity'
 
 export abstract class Form {
-    private readonly store: Store
-    private readonly fileName: string
-    private readonly md5: string
+    #store: Store
+    readonly #fileName: string
+    readonly #md5: string
     protected isFlattened: boolean
+    protected abstract mapper: Map<string, Point>
 
-    constructor (fileName: string, md5: string, isFlattened: boolean) {
-        this.fileName = fileName
-        this.store = Store.getInstance()
-        this.md5 = md5
+    constructor(store: Store,fileName: string, md5: string, isFlattened: boolean) {
+        this.#store = store
+        this.#fileName = fileName
+        this.#md5 = md5
         this.isFlattened = isFlattened
-        this.isIntegrity()
+        this.#isIntegrity()
     }
 
-    private isIntegrity (): void {
-        integrity(path.join(this.store.path, this.fileName), this.md5)
+    #isIntegrity(): void {
+        integrity(path.join(this.#store.path, this.#fileName), this.#md5)
     }
+
+    protected get filePath() {
+        return path.join(this.#store.path,`${this.#fileName}`)
+    }
+
+    abstract generatePDF(data: Data): Promise<string>
+}
+
+export type Point = {
+    x: number
+    y: number
 }
