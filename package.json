@@ -1,7 +1,7 @@
 {
   "name": "pdfjw",
-  "version": "0.0.0",
-  "description": "API to pdftk Jehovah's Witnesses forms",
+  "version": "0.1.0",
+  "description": "API to fill Jehovah's Witnesses forms",
   "main": "index.js",
   "scripts": {
     "start": "node ./dist/index.js",
