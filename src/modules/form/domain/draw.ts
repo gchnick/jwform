@@ -1,18 +1,15 @@
-import CryptoJS from 'crypto-js'
 import fs from 'node:fs/promises'
-import path from 'node:path'
 import { PDFDocument, PDFFont, PDFPage, RGB, StandardFonts, rgb } from 'pdf-lib'
-import { Data } from '../../shared/domain/data'
+import { DataDraw } from '../../shared/domain/data'
 import { Store } from '../../store/store'
-import { NoIntegrityForm } from './no-integrity-form'
+import { PRODUCER } from './constans'
+import { SetDrawTextOptionsFail } from './errors'
+import { File } from './file'
+import { Font, getFont } from './fonts'
 
 type Point = {
     x: number,
     y: number
-}
-
-type Font = {
-    size: number,
 }
 
 type PaddingType = {
@@ -39,7 +36,7 @@ type Setting = {
 
 export type Mapper = Record<string, Setting>
 
-type TextOptions = {
+type DrawTextOption = {
     size: number,
     font: PDFFont,
     color: RGB, 
@@ -49,43 +46,17 @@ type TextOptions = {
  * `D` is the data type with input of form
  * `F` is data formatted to fill the form
  */
-export abstract class Form<D extends Data<F>, F> {
-    #store: Store
-    readonly #fileName: string
-    readonly #md5: string
-    protected isFlattened: boolean
-    protected mapper: Mapper
+export abstract class Draw<D extends DataDraw<F>, F> extends File {
     protected document!: PDFDocument
-    protected textOptions!: TextOptions
-    protected formatted: F
+    protected readonly mapper: Mapper
+    protected readonly formatted: F
+    #options!: DrawTextOption
 
-    constructor(store: Store,fileName: string, data: D, mapper: Mapper, md5: string, isFlattened: boolean) {
-        this.#store = store
-        this.#fileName = fileName
+    constructor(store: Store,fileName: string, data: D, mapper: Mapper, md5: string) {
+        super(store, fileName, md5)
         this.mapper = mapper
-        this.#md5 = md5
-        this.isFlattened = isFlattened
         this.formatted = data.getFormattedData()
-        this.#isIntegrity()
     }
-
-    #isIntegrity(): void {
-        const filePath = path.join(this.#store.path, this.#fileName)
-        fs.readFile(filePath, { encoding: 'base64'})
-            .then(base64 => {
-                const MD5 = CryptoJS.MD5(base64).toString()
-                if (MD5 !== this.#md5) {
-                    throw NoIntegrityForm('Form invalid.')
-                }
-            })
-            .catch(err => console.error('No read file: ', err))
-    }
-
-    protected get filePath() {
-        return path.join(this.#store.path,`${this.#fileName}`)
-    }
-
-    abstract fillForm(): Promise<string>
 
     protected createDocument(): Promise<void> {
         return new Promise((resolve, reject) => {
@@ -94,24 +65,23 @@ export abstract class Form<D extends Data<F>, F> {
                 .then(srcPdf => srcPdf.copy())
                 .then(async (pdf) => {
                     this.document = pdf
-                    resolve(await this.#initTextOptions())
+                    this.document.setProducer(PRODUCER)
+                    resolve(await this.#initDrawTextOptions())
                 })
                 .catch(err => reject(err))
         })
     }
 
-    async #initTextOptions() {
-        const helveticaFont = await this.document.embedFont(StandardFonts.Helvetica)
-        this.textOptions = {
-            size: 12,
-            font: helveticaFont,
-            color:  rgb(0,0,0),
-        }
+    protected createDocumentWithFont(font: Font): Promise<void> {
+        const promise = this.createDocument()
+        this.#setDrawTextOptions(font)
+        return promise
     }
 
     protected drawText(text: string, point: Point, font: Font | undefined = undefined) {
+        font && this.#setDrawTextOptions(font)
         this.#getFirtPageAndMoveTo(point)
-            .drawText(text, font ? {...this.textOptions, ...font} : this.textOptions)
+            .drawText(text, this.#options)
     }
 
     protected drawTextWithSetting(text: string, setting: Setting, index1 = 0, index2 = 0) {
@@ -123,6 +93,35 @@ export abstract class Form<D extends Data<F>, F> {
     protected drawSvgPath(point: Point, svgPath: string) {
         this.#getFirtPageAndMoveTo(point)
             .drawSvgPath(svgPath, { color: rgb(0,0,0), scale: 0.8})
+    }
+
+    async #initDrawTextOptions() {
+        const helveticaFont = await this.document.embedFont(StandardFonts.Helvetica)
+        this.#options = {
+            size: 12,
+            font: helveticaFont,
+            color:  rgb(0,0,0),
+        }
+    }
+
+    async #setDrawTextOptions(font: Font) {
+        if(!this.document) throw SetDrawTextOptionsFail('The document is undefined')
+        
+        if(typeof font.name !== 'undefined') {
+            const buffer = await getFont(font.name)
+            const newFont = await this.document.embedFont(buffer)
+            this.#options = {
+                ...this.#options,
+                font: newFont
+            }
+        }
+
+        if(typeof font.size !== 'undefined') {
+            this.#options = {
+                ...this.#options,
+                size: font.size
+            }
+        }
     }
 
     #getFirtPageAndMoveTo(point: Point): PDFPage {
@@ -181,4 +180,6 @@ export abstract class Form<D extends Data<F>, F> {
 
         return withAligned
     }
+
+    abstract fillForm(): Promise<string>
 }

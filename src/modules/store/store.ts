@@ -16,7 +16,14 @@ const makeSingleton = <T>(initial: T) => {
     }
 }
 
-const getStore = (initial: Store) => {
+export const getStore = () => {
+    if (!instance) {
+        return undefined
+    }
+    return instance
+}
+
+export const initStore = (initial: Store) => {
     if (!instance) {
         instance = makeSingleton<Store>(initial)
         return instance
@@ -24,8 +31,7 @@ const getStore = (initial: Store) => {
     if (initial) {
         throw Error ('Store already initialised')
     }
+
     return instance
 }
-
-export default getStore
 
