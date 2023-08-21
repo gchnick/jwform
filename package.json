@@ -1,16 +1,20 @@
 {
-  "name": "pdfjw",
+  "name": "jwform",
   "version": "0.1.0",
   "description": "API to fill Jehovah's Witnesses forms",
   "main": "index.js",
   "scripts": {
     "start": "node ./dist/index.js",
-    "dev": "ts-node-dev src/index.ts",
+    "start:dev": "ts-node-dev src/index.ts",
     "lint": "eslint . --fix",
     "build": "tsc",
     "test": "jest"
   },
-  "keywords": ["pdf", "forms", "jw"],
+  "keywords": [
+    "pdf",
+    "form",
+    "jw"
+  ],
   "author": "Nick Galan",
   "license": "GPL-3.0",
   "dependencies": {
