@@ -1,8 +1,8 @@
-import { Aligned, Form, Padding } from '../../form/domain/form'
+import { Aligned, Draw, Padding } from '../../form/domain/draw'
 import { Store } from '../store'
 import { RegistriesFormatted, TerritoriesFormatted, TerritoryRegistry, TerritoryRegistryFormatted } from './territory-registry'
 
-export class TerritoryRegistryForm extends Form<TerritoryRegistry, TerritoryRegistryFormatted> {
+export class TerritoryRegistryForm extends Draw<TerritoryRegistry, TerritoryRegistryFormatted> {
     
     constructor(store: Store, data: TerritoryRegistry) {
         super(store,
@@ -42,8 +42,7 @@ export class TerritoryRegistryForm extends Form<TerritoryRegistry, TerritoryRegi
                     font: {size: 11}
                 },
             },
-            '54fa1de2ac8bc7286e0e742db3d1b59b',
-            true)
+            '54fa1de2ac8bc7286e0e742db3d1b59b')
     }
 
     fillForm(): Promise<string> {

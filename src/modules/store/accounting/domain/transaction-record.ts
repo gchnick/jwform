@@ -1,4 +1,4 @@
-import { Data } from '../../../shared/domain/data'
+import { DataDraw } from '../../../shared/domain/data'
 
 export enum TransactionType {
     DONATION = 'donation',
@@ -12,14 +12,14 @@ type AnotherTransaction = {
     amount: number
 }
 
-export type OtherTransactions = [AnotherTransaction] | [AnotherTransaction, AnotherTransaction] | [AnotherTransaction, AnotherTransaction, AnotherTransaction]
+export type OtherTransactions = [AnotherTransaction, AnotherTransaction?, AnotherTransaction?]
 
 type AnotherTransactionFormatted = {
     descripton: string
     amount: string
 }
 
-export type OtherTransactionsFormatted = [AnotherTransactionFormatted] | [AnotherTransactionFormatted, AnotherTransactionFormatted] | [AnotherTransactionFormatted, AnotherTransactionFormatted, AnotherTransactionFormatted]
+export type OtherTransactionsFormatted = [AnotherTransactionFormatted, AnotherTransactionFormatted?, AnotherTransactionFormatted?]
 
 export type TransactionRecordFormatted = {
     date: string
@@ -30,7 +30,7 @@ export type TransactionRecordFormatted = {
     total: string
 }
 
-export class TransactionRecord implements Data<TransactionRecordFormatted> {
+export class TransactionRecord implements DataDraw<TransactionRecordFormatted> {
     readonly #LOCALE = 'es-VE'
     readonly #numberFormat = Intl.NumberFormat(this.#LOCALE, { style: 'decimal', maximumFractionDigits: 2, minimumFractionDigits: 2 })
     readonly #date: Date
@@ -65,31 +65,29 @@ export class TransactionRecord implements Data<TransactionRecordFormatted> {
     #otherFormattedTransactions(): OtherTransactionsFormatted | undefined {
         if (typeof this.#otherTransactions === 'undefined') return undefined
 
-        if(this.#otherTransactions.length === 1) {
-            const another0 = {...this.#otherTransactions[0], amount: this.#numberFormat.format(this.#otherTransactions[0].amount)}
-            return [another0]
-        }
+        const otherTransactionsFormatted: OtherTransactionsFormatted = [
+            {
+                ...this.#otherTransactions[0],
+                amount: this.#numberFormat.format(this.#otherTransactions[0].amount)
+            }
+        ]
 
-        if(this.#otherTransactions.length === 2) {
-            const another0 = {...this.#otherTransactions[0], amount: this.#numberFormat.format(this.#otherTransactions[0].amount)}
-            const another1 = {...this.#otherTransactions[1], amount: this.#numberFormat.format(this.#otherTransactions[1].amount)}
-            return [another0, another1]
-        }
-
-        if(this.#otherTransactions.length === 3) {
-            const another0 = {...this.#otherTransactions[0], amount: this.#numberFormat.format(this.#otherTransactions[0].amount)}
-            const another1 = {...this.#otherTransactions[1], amount: this.#numberFormat.format(this.#otherTransactions[1].amount)}
-            const another2 = {...this.#otherTransactions[2], amount: this.#numberFormat.format(this.#otherTransactions[2].amount)}
-            return [another0, another1, another2]
-        }
+        this.#otherTransactions?.forEach((other, i) => {
+            if(other !== undefined && this.#otherTransactions !== undefined) {
+                otherTransactionsFormatted[i] = {
+                    ...other,
+                    amount: this.#numberFormat.format(other.amount)
+                }
+            }
+        })
         
-        return undefined
+        return otherTransactionsFormatted
     }
 
     #total(): string {
-        const other = (this.#otherTransactions?.map(t => t.amount).reduce((acc, value) => acc+=value)) ?? 0
-        const total = this.#worldwideWorkDonations + this.#congregationExpenses + other
+        let acc = 0
+        this.#otherTransactions?.forEach(t => { if(t) acc += t.amount })
+        const total = this.#worldwideWorkDonations + this.#congregationExpenses + acc
         return this.#numberFormat.format(total)
     }
 }
-

@@ -1,8 +1,8 @@
-import { Aligned, Form, Padding } from '../../../form/domain/form'
+import { Aligned, Draw, Padding } from '../../../form/domain/draw'
 import { Store } from '../../store'
 import { OtherTransactionsFormatted, TransactionRecord, TransactionRecordFormatted } from './transaction-record'
 
-export class TransactionForm extends Form<TransactionRecord, TransactionRecordFormatted> {
+export class TransactionForm extends Draw<TransactionRecord, TransactionRecordFormatted> {
 
     constructor(store: Store, data: TransactionRecord) {
         super(store,
@@ -41,8 +41,7 @@ export class TransactionForm extends Form<TransactionRecord, TransactionRecordFo
                     aligned: Aligned.RIGHT
                 },
             },
-            'f8fc2a3345e648a07d80e3184ae79aea',
-            true)
+            'f8fc2a3345e648a07d80e3184ae79aea')
     }
 
     fillForm(): Promise<string>{
@@ -68,11 +67,13 @@ export class TransactionForm extends Form<TransactionRecord, TransactionRecordFo
                         const descriptonSetting = this.mapper['otherTransactionsDescription']
                         const amountSetting = this.mapper['otherTransactionsAmount']
                         value.forEach((another, index) => {
-                            const descriptonText = another.descripton
-                            const amountText = another.amount
+                            if(another !== undefined) {
+                                const descriptonText = another.descripton
+                                const amountText = another.amount
 
-                            this.drawTextWithSetting(descriptonText, descriptonSetting, index)
-                            this.drawTextWithSetting(amountText, amountSetting, index)
+                                this.drawTextWithSetting(descriptonText, descriptonSetting, index)
+                                this.drawTextWithSetting(amountText, amountSetting, index)
+                            }
                         })
                     }
                 })
