@@ -6,7 +6,7 @@ import { PublisherRecordCard } from './publisher-record-card'
 
 export class PublisherRecordCardForm extends Acrobat<PublisherRecordCard> {
     
-    constructor(store: Store, data: PublisherRecordCard, fileName = 'S-21-S.pdf', flatten = false) {
+    constructor(store: Store, data: PublisherRecordCard, flatten = false, fileName = 'S-21-S.pdf') {
         super(
             store,
             fileName,

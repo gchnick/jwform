@@ -86,8 +86,8 @@ export async function getFields(pdf: string) {
  */
 export async function fillForm(pdf: string, data: Fields, flatten = false) {
     await goToTemporalDirectory()
-    let ORIGIN_FILE = await isBase64AndWriteFile(pdf)
-    let GENERATE_FILE = generateRandomNameTo()
+    const ORIGIN_FILE = await isBase64AndWriteFile(pdf)
+    const GENERATE_FILE = generateRandomNameTo()
     const FDF_FILE = generateRandomNameTo('.fdf')
 
     let COMMAND = `pdftk ${ORIGIN_FILE} generate_fdf output ${FDF_FILE}`
@@ -95,31 +95,9 @@ export async function fillForm(pdf: string, data: Fields, flatten = false) {
     await executeAndCheck(COMMAND, FDF_FILE)
     await updateFdfWithData(FDF_FILE, data)
     
-    COMMAND = `pdftk ${ORIGIN_FILE} fill_form ${FDF_FILE} output ${GENERATE_FILE}`
+    COMMAND = flatten ? `pdftk ${ORIGIN_FILE} fill_form ${FDF_FILE} output ${GENERATE_FILE} flatten` : `pdftk ${ORIGIN_FILE} fill_form ${FDF_FILE} output ${GENERATE_FILE}`
     await executeAndCheck(COMMAND, GENERATE_FILE)
-
-    if(flatten) {
-        ORIGIN_FILE = GENERATE_FILE
-        GENERATE_FILE = generateRandomNameTo()
-        COMMAND = `pdftk ${ORIGIN_FILE} flatten output ${GENERATE_FILE}`
-        await executeAndCheck(COMMAND, GENERATE_FILE)
-    }
     
-    return asBase64(GENERATE_FILE)
-}
-
-/**
- * 
- * @param pdf string base64 of `form .pdf` to fattlen
- * @returns form flattened in string base64
- */
-export async function flattenForm(pdf: string) {
-    await goToTemporalDirectory()
-    const ORIGIN_FILE = await isBase64AndWriteFile(pdf)
-    const GENERATE_FILE = generateRandomNameTo()
-    const COMMAND = `pdftk ${ORIGIN_FILE} flatten output ${GENERATE_FILE}`
-    
-    await executeAndCheck(COMMAND, GENERATE_FILE)
     return asBase64(GENERATE_FILE)
 }
 

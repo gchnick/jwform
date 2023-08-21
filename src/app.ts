@@ -24,9 +24,9 @@ export function fillTerritoryRegistry(territoyRegistry: TerritoryRegistry, path:
     return form.fillForm()
 }
 
-export function fillPublisherRecordCard(publisherRecord: PublisherRecordCard, path: string) {
+export function fillPublisherRecordCard(publisherRecord: PublisherRecordCard, path: string, flatten = false) {
     const store = globalStore(path)
-    const form  = new PublisherRecordCardForm(store, publisherRecord)
+    const form  = new PublisherRecordCardForm(store, publisherRecord, flatten)
     return form.fillForm()
 }
 
@@ -34,7 +34,7 @@ export function getDataOfPublisherRecordCard(path: string, fileName?: string) {
     const store = globalStore(path)
     const publisherRecord = new PublisherRecordCard({})
     const form  = fileName ?
-        new PublisherRecordCardForm(store, publisherRecord, fileName)
+        new PublisherRecordCardForm(store, publisherRecord, false, fileName)
         : new PublisherRecordCardForm(store, publisherRecord)
     return form.getFields()
 }
