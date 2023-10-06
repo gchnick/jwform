@@ -1,5 +1,5 @@
 import { Fields } from '../../pdftk/record-fields'
-import { DataAcrobat } from '../../shared/domain/data'
+import { DataFDF } from '../../shared/domain/data'
 
 type MonthRecord = {
     places?: string,
@@ -76,7 +76,7 @@ type Records = [AnualRecord, AnualRecord?]
 
 type ServiceYear = [string, string?]
 
-export class PublisherRecordCard implements DataAcrobat {
+export class PublisherRecordCard implements DataFDF {
     serviceYear?: ServiceYear
     data?: PublisherData
     records?: Records

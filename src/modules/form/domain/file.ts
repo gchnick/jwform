@@ -5,11 +5,20 @@ import path from 'node:path'
 import { Store } from '../../store/store'
 import { FileNotFound, NoIntegrityForm } from './errors'
 
+/**
+ * File of form with integrity validation
+ */
 export abstract class File {
     readonly #store: Store
     readonly #fileName: string
     readonly #md5: string
 
+    /**
+     * 
+     * @param store path of form store
+     * @param fileName name of file form
+     * @param md5 to validate integrity
+     */
     constructor(store: Store, fileName: string, md5: string) {
         this.#store = store
         this.#fileName = fileName

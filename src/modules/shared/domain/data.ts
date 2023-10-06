@@ -7,7 +7,7 @@ export interface DataDraw<F> {
     getFormattedData(): F
 }
 
-export interface DataAcrobat {
+export interface DataFDF {
     getFields(): Fields
 }
 
