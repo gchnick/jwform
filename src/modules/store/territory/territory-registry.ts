@@ -1,4 +1,4 @@
-import { Data } from '../../shared/domain/data'
+import { DataDraw } from '../../shared/domain/data';
 
 type Registry = {
     assignedTo: string,
@@ -44,14 +44,14 @@ export type TerritoryRegistryFormatted = {
     territories: TerritoriesFormatted
 }
 
-export class TerritoryRegistry implements Data<TerritoryRegistryFormatted> {
-    readonly #LOCALE = 'es-VE'
-    readonly serviceYear: ServiceYear
-    readonly territories: Territories
+export class TerritoryRegistry implements DataDraw<TerritoryRegistryFormatted> {
+    readonly #LOCALE = 'es-VE';
+    readonly serviceYear: ServiceYear;
+    readonly territories: Territories;
 
     constructor({serviceYear, territories}: {serviceYear: ServiceYear, territories: Territories}) {
-        this.serviceYear = serviceYear
-        this.territories = territories
+        this.serviceYear = serviceYear;
+        this.territories = territories;
     }
 
     getFormattedData(): TerritoryRegistryFormatted {
@@ -60,34 +60,34 @@ export class TerritoryRegistry implements Data<TerritoryRegistryFormatted> {
             territories: this.territories.map((t, i) => {
                 return {
                     number: String(t.number),
-                    lastDateCompleted: t.lastDateCompleted.toLocaleDateString(this.#LOCALE),
+                    lastDateCompleted: t.lastDateCompleted.toLocaleDateString(this.#LOCALE, {year: '2-digit', month: '2-digit' ,day: '2-digit'}),
                     registries: this.#getRegistriesFormatted(i)
-                }
+                };
             })
 
-        }
+        };
     }
 
     #getRegistriesFormatted(index: number): RegistriesFormatted {
-        const registries = this.territories[index].registries
+        const registries = this.territories[index].registries;
         const registriesFormatted: RegistriesFormatted = [
             {
-                assignedTo: registries[0].assignedTo,
-                dateAssigned: registries[0].dateAssigned.toLocaleDateString(this.#LOCALE),
-                dateCompleted: registries[0].dateCompleted?.toLocaleDateString(this.#LOCALE) ?? '',
+                assignedTo: '',
+                dateAssigned: '',
+                dateCompleted: '',
             }
-        ]
+        ];
 
         registries.forEach((r, i) => {
             if(r !== undefined) {
                 registriesFormatted[i] = {
                     assignedTo: r.assignedTo,
-                    dateAssigned: r.dateAssigned.toLocaleDateString(this.#LOCALE),
-                    dateCompleted: r.dateCompleted?.toLocaleDateString(this.#LOCALE) ?? ''
-                }
+                    dateAssigned: r.dateAssigned.toLocaleDateString(this.#LOCALE, {year: '2-digit', month: '2-digit', day: '2-digit'}),
+                    dateCompleted: r.dateCompleted?.toLocaleDateString(this.#LOCALE, {year: '2-digit', month: '2-digit', day: '2-digit'}) ?? ''
+                };
             }
-        })
+        });
 
-        return registriesFormatted
+        return registriesFormatted;
     }
 }

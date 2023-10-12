@@ -7,7 +7,7 @@ import { SetDrawTextOptionsFail } from './errors';
 import { File } from './file';
 import { Font, getFont } from './fonts';
 
-type Point = {
+export type Point = {
     x: number,
     y: number
 }
@@ -27,7 +27,7 @@ export enum Aligned {
     RIGHT,
 }
 
-type Setting = {
+export type Setting = {
     point: Point,
     font?: Font,
     padding?: [PaddingType, PaddingType?],
@@ -53,10 +53,10 @@ export abstract class Draw<D extends DataDraw<F>, F> extends File {
     protected readonly formatted: F;
     #options!: DrawTextOption;
 
-    constructor(store: Store,fileName: string, data: D, mapper: Mapper, md5: string) {
+    constructor(store: Store,fileName: string, data: D, md5: string, mapper: Mapper = {}) {
         super(store, fileName, md5);
-        this.mapper = mapper;
         this.formatted = data.getFormattedData();
+        this.mapper = mapper;
     }
 
     protected createDocument(): Promise<void> {
