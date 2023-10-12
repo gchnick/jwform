@@ -1,6 +1,6 @@
 {
   "name": "jwform",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "API to fill Jehovah's Witnesses forms",
   "main": "index.js",
   "scripts": {
