@@ -1,65 +1,22 @@
 {
   "compilerOptions": {
-    /* Basic */
-    // "incremental": true,
-    "target": "ES6",
-    "module": "CommonJS",
-    "lib": ["ES6"],
-    "allowJs": true,
-    // "checkJs": true,
-    // "jsx": "preserve",
-    "declaration": true,
-    // "declarationMap": true,
-    // "outFile": "./",
-    "outDir": "dist",
-    "rootDir": "src",
-    // "composite": true,
-    // "tsBuildInfoFile": "./",
-    "removeComments": true,
-    // "noEmit": true,
-    // "importHelpers": true,
-    // "downlevelIteration": true,
-    // "isolatedModules": true,
-
-    /* Strict */
-    "strict": true,
-    "noImplicitAny": true,
-    "strictNullChecks": true,
-    "strictBindCallApply": true,
-    "strictPropertyInitialization": true,
-    "noImplicitThis": true,
-    "alwaysStrict": true,
-
-    /* Additional checks */
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": true,
-    "forceConsistentCasingInFileNames": true,
-
-    /* Module Resolution Options */
-    // "moduleResolution": "node",
-    // "baseUrl": "./",
-    // "paths": {},
-    // "rootDirs": [],
-    // "typeRoots": [],
-    // "types": [],
-    // "allowSyntheticDefaultImports": true,
+    "baseUrl": ".",
+    "module": "commonjs",
+    "target": "ES2022",
     "esModuleInterop": true,
-    // "preserveSymlinks": true,
-    // "allowUmdGlobalAccess": true,
-
-    /* Source Map Options */
-    // "sourceRoot": "",
-    // "mapRoot": "",
-    // "inlineSourceMap": true,
-    // "inlineSources": true,
-    
-    /* Experimental Options */
-    // "experimentalDecorators": true,
-    // "emitDecoratorMetadata": true,
-
-    /* Avance Options */
-    "resolveJsonModule": true
-  }
+    "strict": true,
+    "outDir": "dist",
+    "sourceMap": true,
+    "inlineSources": true,
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "paths": {
+      "@src/*": ["src/*"],
+      "@territory/*": ["src/modules/territory/*"],
+      "@pdftk/*": ["src/modules/pdftk/*"],
+      "@form/*": ["src/modules/form/*"],
+      "@shared/*": ["src/modules/shared/*"]
+    }
+  },
+  "exclude": ["node_modules", "dist"]
 }

@@ -1,1 +1,1 @@
-export * from './app';
+export * from "@territory/fill-territory-registry";

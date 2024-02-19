@@ -1,2 +1,4 @@
-dist
-/root/src/**/*.js
+dist/
+node_modules/
+coverage/
+
