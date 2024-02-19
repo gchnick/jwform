@@ -37,7 +37,7 @@
     "prepare": "husky"
   },
   "dependencies": {
-    "crypto-js": "4.1.1",
+    "crypto-js": "4.2.0",
     "pdf-lib": "1.17.1"
   },
   "devDependencies": {
@@ -50,7 +50,7 @@
     "@types/fs-extra": "^11.0.4",
     "@types/jest": "^29.5.12",
     "@types/node": "^20.11.19",
-    "@types/crypto-js": "4.1.1",
+    "@types/crypto-js": "4.2.2",
     "@typescript-eslint/eslint-plugin": "^7.0.0",
     "@typescript-eslint/parser": "^7.0.1",
     "@faker-js/faker": "^8.4.1",
