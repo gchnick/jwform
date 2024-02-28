@@ -41,7 +41,7 @@
     "pdf-lib": "1.17.1"
   },
   "devDependencies": {
-    "@commitlint/cli": "^18.6.1",
+    "@commitlint/cli": "^19.0.1",
     "@commitlint/config-conventional": "^18.6.2",
     "@commitlint/types": "^18.6.1",
     "@faker-js/faker": "^8.4.1",
