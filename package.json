@@ -46,7 +46,7 @@
     "@commitlint/types": "^19.0.3",
     "@faker-js/faker": "^8.4.1",
     "@swc/cli": "^0.3.10",
-    "@swc/core": "^1.4.1",
+    "@swc/core": "^1.4.14",
     "@swc/jest": "^0.2.36",
     "@types/crypto-js": "4.2.2",
     "@types/fs-extra": "^11.0.4",
