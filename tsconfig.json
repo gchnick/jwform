@@ -7,14 +7,17 @@
     "strict": true,
     "outDir": "dist",
     "sourceMap": true,
+    "declaration": true,
     "inlineSources": true,
     "skipLibCheck": true,
     "resolveJsonModule": true,
+    "removeComments": true,
     "paths": {
       "@src/*": ["src/*"],
       "@territory/*": ["src/modules/territory/*"],
       "@pdftk/*": ["src/modules/pdftk/*"],
       "@form/*": ["src/modules/form/*"],
+      "@jwform/*": ["src/modules/jwform/*"],
       "@shared/*": ["src/modules/shared/*"]
     }
   },

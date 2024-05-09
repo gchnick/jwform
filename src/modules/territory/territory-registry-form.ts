@@ -1,12 +1,13 @@
 import { Aligned, Draw, Point, Setting } from "@form/domain/draw";
-import { Store } from "@shared/domain/store";
 
+import { Form } from "../form/domain/form";
+import { Pdf } from "../jwform/pdf";
+import { toLocaleDateString } from "../shared/domain/date";
 import {
-  RegistriesFormatted,
-  TerritoriesFormatted,
-  TerritoryRegistry,
-  TerritoryRegistryFormatted,
-} from "./territory-registry";
+  Registries,
+  Territory,
+  TerritoryRegistryData,
+} from "./territory-registry-data";
 
 type Row = {
   numberTerritory: Point;
@@ -261,43 +262,51 @@ const layout: Layout = {
   },
 };
 
-export class TerritoryRegistryForm extends Draw<
-  TerritoryRegistry,
-  TerritoryRegistryFormatted
-> {
-  constructor(store: Store, data: TerritoryRegistry) {
-    super(store, "S-13-S.pdf", data, "54fa1de2ac8bc7286e0e742db3d1b59b");
+export class TerritoryRegistryForm extends Draw implements Form {
+  static formName = "S-13-S.pdf";
+  static md5 = "54fa1de2ac8bc7286e0e742db3d1b59b";
+  locale?: Intl.LocalesArgument;
+  data: TerritoryRegistryData;
+
+  constructor({
+    pdf,
+    data,
+    locale,
+  }: {
+    pdf: Pdf;
+    data: TerritoryRegistryData;
+    locale?: Intl.LocalesArgument;
+  }) {
+    super(pdf);
+    this.data = data;
+    this.locale = locale;
+    // pdf.ensureIsIntegrity(); TODO: Implement integrity verification with strategy pattrem
   }
 
-  fillForm(): Promise<string> {
-    return new Promise((resolve, reject) => {
-      this.createDocument()
-        .then(async () => {
-          for (const [key, value] of Object.entries(this.formatted)) {
-            if (key === "serviceYear" && typeof value === "string") {
-              const setting = layout.serviceYear;
-              await this.drawText(value, setting.point, setting.font);
-            }
+  async fill(): Promise<string> {
+    await this.createDocument();
+    for (const [key, value] of Object.entries(this.data)) {
+      if (key === "serviceYear" && typeof value === "number") {
+        const setting = layout.serviceYear;
+        await this.drawText(String(value), setting.point, setting.font);
+      }
 
-            if (typeof value !== "string") {
-              await this.#writeTerritoryData(value);
-            }
-          }
+      if (typeof value !== "number") {
+        await this.#writeTerritoryData(value);
+      }
+    }
 
-          resolve(await this.document.saveAsBase64());
-        })
-        .catch((error) => reject(error));
-    });
+    return await this.document.saveAsBase64({ dataUri: true });
   }
 
-  async #writeTerritoryData(territories: TerritoriesFormatted) {
+  async #writeTerritoryData(territories: Array<Territory>) {
     for (const [i, t] of territories.entries()) {
       const indexOfTerritory = i + 1;
       const setting = this.#getSettingRow(indexOfTerritory as RowRange);
 
-      await this.drawTextWithSetting(t.number, setting.numberTerritory);
+      await this.drawTextWithSetting(String(t.number), setting.numberTerritory);
       await this.drawTextWithSetting(
-        t.lastDateCompleted,
+        toLocaleDateString(t.lastDateCompleted, this.locale),
         setting.lastDateCompleted,
       );
 
@@ -305,10 +314,7 @@ export class TerritoryRegistryForm extends Draw<
     }
   }
 
-  async #writeRegistryData(
-    registries: RegistriesFormatted,
-    indexOfTerritory: number,
-  ) {
+  async #writeRegistryData(registries: Registries, indexOfTerritory: number) {
     for (const [i, r] of registries.entries()) {
       const indexOfRegistry = i + 1;
       const setting = this.#getSettingRowWithColum(
@@ -318,8 +324,15 @@ export class TerritoryRegistryForm extends Draw<
 
       if (r !== undefined) {
         await this.drawTextWithSetting(r.assignedTo, setting.assignedTo);
-        await this.drawTextWithSetting(r.dateAssigned, setting.dateAssigned);
-        await this.drawTextWithSetting(r.dateCompleted, setting.dateCompleted);
+        await this.drawTextWithSetting(
+          toLocaleDateString(r.dateAssigned, this.locale),
+          setting.dateAssigned,
+        );
+        r.dateCompleted &&
+          (await this.drawTextWithSetting(
+            toLocaleDateString(r.dateCompleted, this.locale),
+            setting.dateCompleted,
+          ));
       }
     }
   }

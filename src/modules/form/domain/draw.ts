@@ -1,7 +1,4 @@
-import * as fs from "node:fs/promises";
-
-import { DataDraw } from "@shared/domain/data";
-import { Store } from "@shared/domain/store";
+import { Pdf } from "@jwform/pdf";
 import {
   PDFDocument,
   PDFFont,
@@ -13,7 +10,6 @@ import {
 
 import { PRODUCER } from "./constans";
 import { SetDrawTextOptionsFail } from "./errors";
-import { File } from "./file";
 import { Font, getFont } from "./fonts";
 
 export type Point = {
@@ -51,41 +47,20 @@ type DrawTextOption = {
   color: RGB;
 };
 
-/**
- * Represent a form that will be filled out by drawing the data. For this we will use `pdf-lib`
- * @argument {D} D data type with input of form
- * @argument {F} F data formatted to fill the form
- */
-export abstract class Draw<D extends DataDraw<F>, F> extends File {
+export abstract class Draw {
   protected document!: PDFDocument;
-  protected readonly mapper: Mapper;
-  protected readonly formatted: F;
+  readonly #pdf: Pdf;
   #options!: DrawTextOption;
 
-  constructor(
-    store: Store,
-    fileName: string,
-    data: D,
-    md5: string,
-    mapper: Mapper = {},
-  ) {
-    super(store, fileName, md5);
-    this.formatted = data.getFormattedData();
-    this.mapper = mapper;
+  constructor(pdf: Pdf) {
+    this.#pdf = pdf;
   }
 
-  protected createDocument(): Promise<void> {
-    return new Promise((resolve, reject) => {
-      fs.readFile(this.filePath)
-        .then((data) => PDFDocument.load(data))
-        .then((srcPdf) => srcPdf.copy())
-        .then(async (pdf) => {
-          this.document = pdf;
-          this.document.setProducer(PRODUCER);
-          resolve(await this.#initDrawTextOptions());
-        })
-        .catch((error) => reject(error));
-    });
+  protected async createDocument(): Promise<void> {
+    const document = await PDFDocument.load(this.#pdf.value);
+    this.document = await document.copy();
+    this.document.setProducer(PRODUCER);
+    await this.#initDrawTextOptions();
   }
 
   protected async createDocumentWithFont(font: Font): Promise<void> {
@@ -229,6 +204,4 @@ export abstract class Draw<D extends DataDraw<F>, F> extends File {
 
     return withAligned;
   }
-
-  abstract fillForm(): Promise<string>;
 }
