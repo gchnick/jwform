@@ -1,5 +1,5 @@
 ---
-name: 'Sync labels'
+name: "Sync labels"
 
 on:
   push:
@@ -13,4 +13,4 @@ jobs:
       - uses: actions/checkout@v4
       - uses: micnncim/action-label-syncer@v1
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.MODERATOR_GITHUB_TOKEN }}

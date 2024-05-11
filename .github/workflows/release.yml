@@ -1,5 +1,5 @@
 ---
-name: 'Release'
+name: "Release"
 
 on:
   push:
@@ -47,7 +47,7 @@ jobs:
         with:
           tag_name: ${{ steps.changelog.outputs.tag }}
           body: ${{ steps.changelog.outputs.clean_changelog }}
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.MODERATOR_GITHUB_TOKEN }}
       - name: Publish to NPM 🚀
         if: ${{ steps.changelog.outputs.tag }}
         run: npm publish
