@@ -1,6 +1,6 @@
 import type { Layout } from "./types";
 
-import { Aligned } from "../form/domain/draw";
+import { Aligned } from "../form/domain/types";
 
 export const LAYOUT: Layout = {
   serviceYear: { point: { x: 448, y: 95 }, font: { size: 14 } },

@@ -1,3 +1,4 @@
+import type { Setting } from "../form/domain/types";
 import type { Registry } from "./schema";
 import type {
   Column,
@@ -12,7 +13,7 @@ import type {
   Territory,
 } from "./types";
 
-import { Draw, Setting } from "../form/domain/draw";
+import { Draw } from "../form/domain/draw";
 import { Form } from "../form/domain/form";
 import { FolderStore } from "../jwform/folder-store";
 import { Pdf } from "../jwform/pdf";

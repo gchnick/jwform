@@ -1,4 +1,4 @@
-import { Point, Setting } from "../form/domain/draw";
+import type { Point, Setting } from "../form/domain/types";
 
 type Registry = {
   assignedTo: string;
