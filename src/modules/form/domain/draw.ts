@@ -1,4 +1,3 @@
-import { Pdf } from "@jwform/pdf";
 import {
   PDFDocument,
   PDFFont,
@@ -7,6 +6,8 @@ import {
   rgb,
   StandardFonts,
 } from "pdf-lib";
+
+import { Pdf } from "@/src/modules/jwform/pdf";
 
 import { PRODUCER } from "./constans";
 import { SetDrawTextOptionsFail } from "./errors";

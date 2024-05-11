@@ -1,3 +1,3 @@
 export interface Form {
-  fill(): Promise<string>;
+  fill(): Promise<Uint8Array>;
 }
