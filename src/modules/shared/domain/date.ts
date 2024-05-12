@@ -3,7 +3,8 @@ export const toLocaleDateString = (
   locale?: Intl.LocalesArgument,
   options?: Intl.LocaleOptions,
 ): string => {
-  return date.toLocaleDateString(
+  const _date = new Date(date);
+  return _date.toLocaleDateString(
     locale ?? "en-US",
     options ?? {
       year: "2-digit",

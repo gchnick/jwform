@@ -2,8 +2,8 @@
 repository:
   name: jwform
   description: API to fill Jehovah's Witnesses forms
-  homepage: github.com/gchnick/jwform#readme
-  topics: jw, form, jwform, fill, pdf
+  homepage: github.com/gchnick/jwform#README
+  topics: jw, form, jehovah, fill, pdf
   has_wiki: false
   private: false
   has_issues: true

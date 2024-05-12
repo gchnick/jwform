@@ -4,4 +4,3 @@ dist/
 .idea
 .env
 coverage/
-playground

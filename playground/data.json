@@ -1,0 +1,52 @@
+{
+  "serviceYear": 2023,
+  "territories": [
+    {
+      "number": 1,
+      "lastDateCompleted": "2023-7-12",
+      "registries": [
+        {
+          "assignedTo": "Juan Leal",
+          "dateAssigned": "2023-8-1",
+          "dateCompleted": "2023-8-20"
+        },
+        {
+          "assignedTo": "Luis Amado",
+          "dateAssigned": "2023-8-30",
+          "dateCompleted": "2023-9-10"
+        },
+        {
+          "assignedTo": "Jual Leal",
+          "dateAssigned": "2023-9-15",
+          "dateCompleted": "2023-9-30"
+        },
+        {
+          "assignedTo": "Marco Feliz",
+          "dateAssigned": "2023-10-10",
+          "dateCompleted": "2023-10-25"
+        }
+      ]
+    },
+    {
+      "number": 2,
+      "lastDateCompleted": "2023-7-1",
+      "registries": [
+        {
+          "assignedTo": "Lucas Paciente",
+          "dateAssigned": "2023-7-30",
+          "dateCompleted": "2023-8-15"
+        }
+      ]
+    },
+    {
+      "number": 3,
+      "lastDateCompleted": "2023-7-3",
+      "registries": [
+        {
+          "assignedTo": "Carlos Cantor",
+          "dateAssigned": "2023-7-30"
+        }
+      ]
+    }
+  ]
+}

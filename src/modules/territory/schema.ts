@@ -15,7 +15,9 @@ const territorySchema = z.object({
   registries: registrySchema.array().min(1).max(4),
 });
 
-export const schema = z.object({
+export const territoryRegistrySchema = z.object({
   serviceYear: z.number().int(),
   territories: territorySchema.array(),
 });
+
+export type Registry = z.infer<typeof territoryRegistrySchema>;

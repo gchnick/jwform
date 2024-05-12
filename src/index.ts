@@ -1,2 +1,1 @@
-export { JwForm } from "@jwform/jwform";
-export { TerritoryRegistryData } from "@territory/territory-registry-data";
+export { JwForm } from "./modules/jwform";

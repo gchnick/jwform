@@ -1,5 +1,5 @@
 ---
-name: 'Greetings'
+name: "Greetings"
 
 on:
   pull_request:
@@ -14,7 +14,7 @@ jobs:
     steps:
       - uses: actions/first-interaction@v1
         with:
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          repo-token: ${{ secrets.MODERATOR_GITHUB_TOKEN }}
           issue-message: |
             Hey @${{github.actor}} 👋!
 

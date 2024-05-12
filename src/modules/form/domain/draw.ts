@@ -1,51 +1,13 @@
-import { Pdf } from "@jwform/pdf";
-import {
-  PDFDocument,
-  PDFFont,
-  PDFPage,
-  RGB,
-  rgb,
-  StandardFonts,
-} from "pdf-lib";
+import type { DrawTextOption, Point, Setting } from "./types";
+
+import { PDFDocument, PDFPage, rgb, StandardFonts } from "pdf-lib";
+
+import { Pdf } from "@/src/modules/jwform/pdf";
 
 import { PRODUCER } from "./constans";
 import { SetDrawTextOptionsFail } from "./errors";
 import { Font, getFont } from "./fonts";
-
-export type Point = {
-  x: number;
-  y: number;
-};
-
-type PaddingType = {
-  type: Padding;
-  value: number;
-};
-
-export enum Padding {
-  TOP,
-  LEFT,
-}
-
-export enum Aligned {
-  CENTER,
-  RIGHT,
-}
-
-export type Setting = {
-  point: Point;
-  font?: Font;
-  padding?: [PaddingType, PaddingType?];
-  aligned?: Aligned;
-};
-
-export type Mapper = Record<string, Setting>;
-
-type DrawTextOption = {
-  size: number;
-  font: PDFFont;
-  color: RGB;
-};
+import { Aligned, Padding } from "./types";
 
 export abstract class Draw {
   protected document!: PDFDocument;

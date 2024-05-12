@@ -12,8 +12,6 @@
     "plugin:@typescript-eslint/recommended",
     "plugin:@typescript-eslint/recommended-type-checked",
     "plugin:prettier/recommended",
-    "plugin:jest/recommended",
-    "plugin:jest/style",
     "plugin:unicorn/recommended",
     "plugin:node/recommended"
   ],
@@ -56,23 +54,17 @@
       }
     },
     {
-      "files": ["playground/**"],
-      "rules": {
-        "no-console": "off"
-      }
-    },
-    {
       "files": ["tests/**"],
-      "plugins": ["jest"],
+      "plugins": ["vitest"],
+      "extends": ["plugin:vitest/recommended"],
       "rules": {
         "@typescript-eslint/unbound-method": "off",
-        "jest/unbound-method": "error",
-        "jest/expect-expect": "off"
+        "vitest/expect-expect": "off",
+        "vitest/no-standalone-expect": "off"
       }
     }
   ],
   "env": {
-    "node": true,
-    "jest": true
+    "node": true
   }
 }
