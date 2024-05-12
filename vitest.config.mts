@@ -11,7 +11,7 @@ export default defineConfig({
     include: ["tests/unit/**/*.test.ts"],
     env: loadEnv("test", process.cwd(), ""),
     coverage: {
-      provider: "istanbul",
+      provider: "v8",
       reporter: ["text", "json", "html"],
       reportsDirectory: "coverage/unit",
       include: ["src/**/*.ts"],
